@@ -39,6 +39,15 @@ resource "aws_security_group" "bastion_sg" {
   }
 }
 
+data "aws_ami" "amazon_linux_2" {
+  owners      = ["amazon"]
+  most_recent = true
+  filter {
+    name   = "name"
+    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+  }
+}
+
 resource "aws_instance" "bastion_host" {
   ami                         = data.aws_ami.amazon_linux_2.id
   instance_type               = "t3.micro"
@@ -50,27 +59,34 @@ resource "aws_instance" "bastion_host" {
   user_data = <<-EOF
               #!/bin/bash
               exec > /var/log/user-data.log 2>&1
+              # Your user-data here
+  EOF
 
-              echo "Starting user_data setup"
+  metadata_options {
+    http_endpoint               = "enabled"
+    http_protocol_ipv6          = "disabled"
+    http_put_response_hop_limit = 1
+    http_tokens                 = "optional"
+    instance_metadata_tags      = "disabled"
+  }
 
-              yum update -y
-              yum install -y vim git unzip htop
+  maintenance_options {
+    auto_recovery = "default"
+  }
 
-              echo "Welcome to the Bastion Host - $(hostname)" > /etc/motd
+  private_dns_name_options {
+    enable_resource_name_dns_a_record    = false
+    enable_resource_name_dns_aaaa_record = false
+    hostname_type                        = "ip-name"
+  }
 
-              echo "Setup complete"
-              EOF
+  root_block_device {
+    delete_on_termination = true
+    volume_size           = 8
+    volume_type           = "gp2"
+  }
 
   tags = {
-    Name = "dev-bastion-host"
-  }
-}
-
-data "aws_ami" "amazon_linux_2" {
-  owners      = ["amazon"]
-  most_recent = true
-  filter {
-    name   = "name"
-    values = ["amzn2-ami-hvm-*-x86_64-gp2"]
+    Name = "${var.environment_name}-bastion-host"
   }
 }
