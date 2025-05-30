@@ -16,6 +16,8 @@ resource "aws_lambda_function" "this" {
   timeout     = 10
   memory_size = 128
 
+  layers = var.layers
+
   environment {
     variables = {
       DB_HOST = var.db_endpoint

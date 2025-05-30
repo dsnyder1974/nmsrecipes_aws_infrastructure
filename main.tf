@@ -19,7 +19,7 @@ terraform {
 }
 
 provider "aws" {
-  region  = "us-east-2"
+  region = "us-east-2"
 }
 
 # Pull the RDS credentials from AWS Secrets Manager.
@@ -97,12 +97,52 @@ module "api_gateway" {
 # Lambda Functions - Sets up the Lambda functions for the application.
 #   Uses base_lambda_api to create instances of the lambda functions.
 
+# Resolve latest versions of shared layers
+data "aws_lambda_layer_version" "pg_secrets" {
+  layer_name = "pg-secrets-lib"
+}
+
+data "aws_lambda_layer_version" "with_cors" {
+  layer_name = "withCors-lib"
+}
+
+locals {
+  common_layers = [
+    data.aws_lambda_layer_version.pg_secrets.arn,
+    data.aws_lambda_layer_version.with_cors.arn,
+  ]
+}
+
 # List Categories - Lambda function to list data from the Categories table.
 module "list_categories" {
   source = "./modules/base_lambda_api"
 
   function_name = "${var.environment_name}-pgListCategories"
   route_key     = "GET /pgCategories"
+
+  layers = local.common_layers
+
+  environment_name          = var.environment_name
+  lambda_execution_role_arn = module.lambda_security.lambda_security_role_arn
+  lambda_sg_id              = module.lambda_security.lambda_sg_id
+  lambda_api_id             = module.api_gateway.lambda_api_id
+  lambda_api_execution_arn  = module.api_gateway.lambda_api_execution_arn
+  lambda_api_dependency     = module.api_gateway.api_dependency
+  subnet_ids                = module.networking.private_subnet_ids
+  vpc_id                    = module.networking.vpc_id
+
+  db_endpoint = module.rds.rds_endpoint
+  db_port     = module.rds.rds_port
+}
+
+# Patch Category - Lambda function to patch an existing entry to the Categories table.
+module "patch_category" {
+  source = "./modules/base_lambda_api"
+
+  function_name = "${var.environment_name}-pgPatchCategory"
+  route_key     = "PATCH /pgCategory"
+
+  layers = local.common_layers
 
   environment_name          = var.environment_name
   lambda_execution_role_arn = module.lambda_security.lambda_security_role_arn
@@ -123,6 +163,8 @@ module "post_category" {
 
   function_name = "${var.environment_name}-pgPostCategory"
   route_key     = "POST /pgCategory"
+
+  layers = local.common_layers
 
   environment_name          = var.environment_name
   lambda_execution_role_arn = module.lambda_security.lambda_security_role_arn

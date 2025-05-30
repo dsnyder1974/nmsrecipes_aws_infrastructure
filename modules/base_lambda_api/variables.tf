@@ -58,6 +58,12 @@ variable lambda_api_execution_arn {
   description = "The execution ARN of the API Gateway"
 }
 
+variable "layers" {
+  description = "Lambda layers to attach"
+  type        = list(string)
+  default     = []
+}
+
 variable "lambda_api_dependency" {
   type        = any
   description = "Dummy dependency to enforce apply order for API Gateway"
