@@ -140,7 +140,7 @@ module "patch_category" {
   source = "./modules/base_lambda_api"
 
   function_name = "${var.environment_name}-pgPatchCategory"
-  route_key     = "PATCH /pgCategory"
+  route_key     = "PATCH /pgCategory/{id}"
 
   layers = local.common_layers
 
