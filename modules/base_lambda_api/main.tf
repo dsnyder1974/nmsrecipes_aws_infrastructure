@@ -19,10 +19,13 @@ resource "aws_lambda_function" "this" {
   layers = var.layers
 
   environment {
-    variables = {
-      DB_HOST = var.db_endpoint
-      DB_PORT = var.db_port
-    }
+    variables = merge(
+      {
+        DB_HOST = var.db_endpoint
+        DB_PORT = var.db_port
+      },
+      var.additional_environment_variables
+    )
   }
 
   vpc_config {

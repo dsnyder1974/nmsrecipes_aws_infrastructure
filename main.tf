@@ -131,6 +131,11 @@ module "list_categories" {
   subnet_ids                = module.networking.private_subnet_ids
   vpc_id                    = module.networking.vpc_id
 
+  additional_environment_variables = {
+    STAGE           = var.environment_name
+    ALLOWED_ORIGINS = var.allowed_origins
+  }
+
   db_endpoint = module.rds.rds_endpoint
   db_port     = module.rds.rds_port
 }
@@ -153,6 +158,11 @@ module "patch_category" {
   subnet_ids                = module.networking.private_subnet_ids
   vpc_id                    = module.networking.vpc_id
 
+  additional_environment_variables = {
+    STAGE           = var.environment_name
+    ALLOWED_ORIGINS = var.allowed_origins
+  }
+
   db_endpoint = module.rds.rds_endpoint
   db_port     = module.rds.rds_port
 }
@@ -174,6 +184,11 @@ module "post_category" {
   lambda_api_dependency     = module.api_gateway.api_dependency
   subnet_ids                = module.networking.private_subnet_ids
   vpc_id                    = module.networking.vpc_id
+
+  additional_environment_variables = {
+    STAGE           = var.environment_name
+    ALLOWED_ORIGINS = var.allowed_origins
+  }
 
   db_endpoint = module.rds.rds_endpoint
   db_port     = module.rds.rds_port

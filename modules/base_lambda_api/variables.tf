@@ -64,6 +64,13 @@ variable "layers" {
   default     = []
 }
 
+variable "additional_environment_variables" {
+  description = "Additional environment variables to inject"
+  type        = map(string)
+  default     = {}
+}
+
+
 variable "lambda_api_dependency" {
   type        = any
   description = "Dummy dependency to enforce apply order for API Gateway"

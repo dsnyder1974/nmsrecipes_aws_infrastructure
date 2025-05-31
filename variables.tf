@@ -20,3 +20,9 @@ variable "public_key_path" {
   type        = string
   default     = ""
 }
+
+variable "allowed_origins" {
+  description = "Comma-separated list of allowed origins for CORS"
+  type        = string
+  default     = "http://localhost:3000"
+}
