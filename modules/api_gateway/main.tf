@@ -6,6 +6,13 @@
 resource "aws_apigatewayv2_api" "lambda_api" {
   name          = "${var.environment_name}-api"
   protocol_type = "HTTP"
+
+    cors_configuration {
+    allow_origins     = ["http://localhost:3000"]
+    allow_methods     = ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"]
+    allow_headers     = ["Content-Type", "Authorization"]
+    allow_credentials = true
+  }
 }
 
 resource "aws_apigatewayv2_stage" "api_stage" {

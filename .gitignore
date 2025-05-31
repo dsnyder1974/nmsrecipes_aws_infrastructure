@@ -2,6 +2,9 @@
 **/.terraform/*
 # !.terraform/providers
 
+# Terraform archive if present
+terraform.zip
+
 # .tfstate files
 *.tfstate
 *.tfstate.*
