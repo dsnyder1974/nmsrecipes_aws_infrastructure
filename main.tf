@@ -199,7 +199,7 @@ module "delete_category" {
   source = "./modules/base_lambda_api"
 
   function_name = "${var.environment_name}-pgDeleteCategory"
-  route_key     = "DELETE /pgCategory"
+  route_key     = "DELETE /pgCategory/{id}"
 
   layers = local.common_layers
 
