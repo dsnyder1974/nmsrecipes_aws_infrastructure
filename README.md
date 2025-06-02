@@ -1,6 +1,6 @@
 # AWS Infrastructure with Terraform
 
-This Terraform project sets up an AWS infrastructure for proving a backend API. The backend is implemented using Lambda functions, which have access to a Postgres database and Secrets Manager. The database is located on a private subnet, so a Bastion host is setup to allow direct access to database management software, such as pgAdmin.
+This Terraform project sets up an AWS infrastructure for proving a backend API. The backend is implemented using Lambda functions, which have access to a Postgres database and Secrets Manager. The database is located on a private subnet, so a Bastion host is setup to allow direct access to database management software, such as pgAdmin. The project's progress is tracked in [**Notion**](https://perpetual-cobalt-b4e.notion.site/1f50ea20f0f480339cf7f733b899b07a?v=1f50ea20f0f4814d8434000ca574d7d9&source=copy_link).
 
 ## 📁 Project Structure
 
