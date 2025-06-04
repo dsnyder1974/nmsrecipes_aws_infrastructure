@@ -92,6 +92,7 @@ module "api_gateway" {
   source = "./modules/api_gateway"
 
   environment_name = var.environment_name
+  allowed_origins  = split(",", var.allowed_origins)
 }
 
 # Lambda Functions - Sets up the Lambda functions for the application.
