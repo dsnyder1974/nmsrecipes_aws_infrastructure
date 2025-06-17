@@ -49,7 +49,7 @@ data "aws_ami" "amazon_linux_2" {
 }
 
 resource "aws_instance" "bastion_host" {
-  ami                         = data.aws_ami.amazon_linux_2.id
+  ami                         = "ami-04cb802b34301daba"
   instance_type               = "t3.micro"
   subnet_id                   = var.subnet_id
   vpc_security_group_ids      = [aws_security_group.bastion_sg.id]
