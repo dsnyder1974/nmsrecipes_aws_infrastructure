@@ -5,7 +5,7 @@ module "list_items" {
   function_name = "${var.environment_name}-pgListItems"
   route_key     = "GET /pgItems"
 
-  layers                    = local.common_layers
+  layers = local.common_layers
 
   environment_name          = var.environment_name
   lambda_execution_role_arn = module.lambda_security.lambda_security_role_arn
@@ -154,6 +154,7 @@ module "get_ingredients_for_item" {
   additional_environment_variables = {
     STAGE           = var.environment_name
     ALLOWED_ORIGINS = var.allowed_origins
+    REDIS_ENDPOINT  = module.redis.redis_endpoint
   }
 
   db_endpoint = module.rds.rds_endpoint
