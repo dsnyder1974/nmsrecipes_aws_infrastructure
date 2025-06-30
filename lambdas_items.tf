@@ -182,6 +182,7 @@ module "set_preferred_recipe_for_item" {
   additional_environment_variables = {
     STAGE           = var.environment_name
     ALLOWED_ORIGINS = var.allowed_origins
+    REDIS_ENDPOINT  = module.redis.redis_endpoint
   }
 
   db_endpoint = module.rds.rds_endpoint
