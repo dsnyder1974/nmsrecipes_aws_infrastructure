@@ -20,7 +20,7 @@ terraform {
 
 provider "aws" {
   profile = "terraform-user"
-  region = "us-east-2"
+  region  = "us-east-2"
 }
 
 # Pull the RDS credentials from AWS Secrets Manager.
@@ -94,6 +94,15 @@ module "api_gateway" {
 
   environment_name = var.environment_name
   allowed_origins  = split(",", var.allowed_origins)
+}
+
+# Redis - Sets up a Redis instance for caching.
+module "redis" {
+  source = "./modules/redis"
+
+  vpc_id             = module.networking.vpc_id
+  private_subnet_ids = module.networking.private_subnet_ids
+  lambda_sg_id       = module.lambda_security.lambda_sg_id
 }
 
 # Lambda Functions - Sets up the Lambda functions for the application.

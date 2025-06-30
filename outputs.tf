@@ -14,3 +14,8 @@ output "rds_endpoint" {
   value       = module.rds.rds_endpoint
   description = "RDS PostgreSQL Endpoint"
 }
+
+output "redis_endpoint" {
+  value       = module.redis.redis_endpoint
+  description = "Redis Endpoint"
+}
